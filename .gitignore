@@ -4,6 +4,11 @@ node_modules/
 .qodo/
 dist/
 build/
+bin/
+obj/
+*.user
 __pycache__/
 venv/
 .venv/
+.idea/
+.vscode/
