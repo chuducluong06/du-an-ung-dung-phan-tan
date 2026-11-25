@@ -11,12 +11,16 @@ import NotFoundPage from './pages/NotFoundPage';
 export default function App() {
   const [cartCount, setCartCount] = useState(0);
 
+  const handleAddToCart = (item) => {
+    setCartCount((prev) => prev + 1);
+  };
+
   return (
     <BrowserRouter>
       <Layout cartCount={cartCount}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/" element={<HomePage onAddToCart={handleAddToCart} />} />
+          <Route path="/menu" element={<MenuPage onAddToCart={handleAddToCart} />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/tracking" element={<TrackingPage />} />
           <Route path="/tracking/:id" element={<TrackingPage />} />

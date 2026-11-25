@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Utensils, ChefHat, Clock, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Utensils, ChefHat, Clock, ArrowRight, Sparkles, Flame } from 'lucide-react';
 import Button from '../components/Button';
+import FoodList from '../components/menu/FoodList';
+import { menuItems } from '../data/menuData';
 
-export default function HomePage() {
+export default function HomePage({ onAddToCart }) {
+  // Lấy các món ăn nổi bật / bán chạy
+  const popularItems = menuItems.filter((item) => item.isPopular).slice(0, 4);
+
   return (
-    <div className="fade-in" style={{ padding: '1rem 0' }}>
-      {/* Hero Section */}
+    <div className="fade-in" style={{ padding: '0.5rem 0' }}>
+      {/* 1. Hero Section */}
       <section
         style={{
           backgroundColor: 'var(--white)',
@@ -17,7 +22,7 @@ export default function HomePage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '2.5rem',
           alignItems: 'center',
-          marginBottom: '2.5rem'
+          marginBottom: '3rem'
         }}
       >
         <div>
@@ -42,7 +47,7 @@ export default function HomePage() {
             style={{
               color: 'var(--primary)',
               fontSize: '2.5rem',
-              lineHeight: '1.2',
+              lineHeight: '1.25',
               fontWeight: '800',
               marginBottom: '1.25rem'
             }}
@@ -154,7 +159,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3 Trụ cột chức năng */}
+      {/* 2. Khu vực Món Ăn Bán Chạy (Popular Items) */}
+      <section style={{ marginBottom: '3.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '1.75rem',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}
+        >
+          <div>
+            <div
+              style={{
+                color: 'var(--accent)',
+                fontWeight: '700',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                marginBottom: '4px'
+              }}
+            >
+              <Flame size={18} /> GỢI Ý HÔM NAY
+            </div>
+            <h2 style={{ color: 'var(--primary)', fontSize: '1.85rem', fontWeight: '800' }}>
+              Món Ăn Nổi Bật Được Yêu Thích
+            </h2>
+          </div>
+
+          <Link
+            to="/menu"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: 'var(--primary)',
+              fontWeight: '700',
+              fontSize: '0.95rem'
+            }}
+          >
+            Xem toàn bộ thực đơn <ArrowRight size={18} color="var(--accent)" />
+          </Link>
+        </div>
+
+        <FoodList items={popularItems} onAddToCart={onAddToCart} />
+      </section>
+
+      {/* 3. 3 Trụ cột chức năng */}
       <section
         style={{
           display: 'grid',
@@ -230,7 +284,8 @@ export default function HomePage() {
             backgroundColor: 'var(--white)',
             padding: '1.75rem',
             borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: 'var(--shadow-sm)',
+            border: 'none'
           }}
         >
           <div

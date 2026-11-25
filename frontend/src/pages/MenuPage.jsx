@@ -1,41 +1,50 @@
-import React from 'react';
-import { Utensils, Construction } from 'lucide-react';
+import React, { useState } from 'react';
+import { categories, menuItems } from '../data/menuData';
+import CategoryList from '../components/menu/CategoryList';
+import FoodList from '../components/menu/FoodList';
 
-export default function MenuPage() {
+export default function MenuPage({ onAddToCart }) {
+  const [selectedCategory, setSelectedCategory] = useState('Tất cả');
+
+  // Lọc theo danh mục
+  const filteredItems = menuItems.filter((item) => {
+    return selectedCategory === 'Tất cả' || item.category === selectedCategory;
+  });
+
   return (
-    <div className="fade-in" style={{ padding: '2rem 0', textAlign: 'center' }}>
-      <div
-        style={{
-          backgroundColor: 'var(--white)',
-          padding: '3rem 2rem',
-          borderRadius: 'var(--radius-lg)',
-          boxShadow: 'var(--shadow-sm)',
-          maxWidth: '680px',
-          margin: '0 auto'
-        }}
-      >
-        <div
+    <div className="fade-in" style={{ padding: '0.5rem 0' }}>
+      {/* Header trang thực đơn */}
+      <div style={{ marginBottom: '1.75rem' }}>
+        <h1
           style={{
-            width: '60px',
-            height: '60px',
-            backgroundColor: 'rgba(255, 106, 31, 0.12)',
-            color: 'var(--accent)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 1.5rem'
+            color: 'var(--primary)',
+            fontSize: '2rem',
+            fontWeight: '800',
+            marginBottom: '0.5rem'
           }}
         >
-          <Utensils size={30} />
-        </div>
-        <h2 style={{ color: 'var(--primary)', marginBottom: '0.75rem', fontSize: '1.75rem' }}>
-          Trang Thực Đơn (Menu)
-        </h2>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-          Khung trang đã sẵn sàng. Danh mục món ăn, FoodCard, tìm kiếm và bộ lọc sẽ được hoàn thiện trong <strong>Ngày 3 & Ngày 4</strong> theo lộ trình.
+          📖 Thực Đơn Nhà Hàng
+        </h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>
+          Tuyển chọn các món ăn tươi ngon, chế biến ngay khi nhận đơn tại bếp
         </p>
       </div>
+
+      {/* Danh mục món ăn */}
+      <CategoryList
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
+
+      {/* Danh sách món ăn */}
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+          Hiển thị <strong>{filteredItems.length}</strong> món ăn
+        </span>
+      </div>
+
+      <FoodList items={filteredItems} onAddToCart={onAddToCart} />
     </div>
   );
 }
