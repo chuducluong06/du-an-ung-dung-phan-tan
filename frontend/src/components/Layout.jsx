@@ -1,8 +1,11 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { useCart } from '../context/CartContext';
 
-export default function Layout({ children, cartCount = 0 }) {
+export default function Layout({ children }) {
+  const { totalItems } = useCart();
+
   return (
     <div
       style={{
@@ -12,7 +15,7 @@ export default function Layout({ children, cartCount = 0 }) {
         backgroundColor: 'var(--background)'
       }}
     >
-      <Navbar cartCount={cartCount} />
+      <Navbar cartCount={totalItems} />
       
       <main
         style={{

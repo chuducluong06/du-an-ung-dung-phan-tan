@@ -1,30 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Utensils, ChefHat, Clock, ArrowRight, Sparkles, Flame } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Utensils, ChefHat, Clock, ArrowRight, Sparkles, Flame, Search } from 'lucide-react';
 import Button from '../components/Button';
 import FoodList from '../components/menu/FoodList';
 import { menuItems } from '../data/menuData';
 
 export default function HomePage({ onAddToCart }) {
+  const navigate = useNavigate();
+  const [quickSearch, setQuickSearch] = useState('');
+
   // Lấy các món ăn nổi bật / bán chạy
   const popularItems = menuItems.filter((item) => item.isPopular).slice(0, 4);
+
+  const handleQuickSearchSubmit = (e) => {
+    e.preventDefault();
+    if (quickSearch.trim()) {
+      navigate(`/menu?search=${encodeURIComponent(quickSearch.trim())}`);
+    } else {
+      navigate('/menu');
+    }
+  };
 
   return (
     <div className="fade-in" style={{ padding: '0.5rem 0' }}>
       {/* 1. Hero Section */}
-      <section
-        style={{
-          backgroundColor: 'var(--white)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '3rem 2.5rem',
-          boxShadow: 'var(--shadow-md)',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2.5rem',
-          alignItems: 'center',
-          marginBottom: '3rem'
-        }}
-      >
+      <section className="hero-section">
         <div>
           <div
             style={{
@@ -40,7 +40,7 @@ export default function HomePage({ onAddToCart }) {
               marginBottom: '1rem'
             }}
           >
-            <Sparkles size={16} /> Đề tài 04 - Hệ thống đặt món & xử lý tại bếp
+            <Sparkles size={16} /> Đề tài 04 - Hệ thống đặt món & xử lý tại bếp (.NET 10 & React)
           </div>
 
           <h1
@@ -60,11 +60,52 @@ export default function HomePage({ onAddToCart }) {
               color: 'var(--text-muted)',
               fontSize: '1.05rem',
               lineHeight: '1.7',
-              marginBottom: '2rem'
+              marginBottom: '1.75rem'
             }}
           >
             Khách hàng dễ dàng lựa chọn món ăn và nhận thông báo trạng thái chế biến theo thời gian thực (Realtime) nhờ kiến trúc phân tán kết hợp RabbitMQ và SignalR/WebSocket.
           </p>
+
+          {/* Quick Search Form ngay trên Hero */}
+          <form
+            onSubmit={handleQuickSearchSubmit}
+            style={{
+              display: 'flex',
+              gap: '0.5rem',
+              marginBottom: '1.75rem',
+              maxWidth: '460px'
+            }}
+          >
+            <div style={{ position: 'relative', flex: 1 }}>
+              <Search
+                size={18}
+                style={{
+                  position: 'absolute',
+                  left: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'var(--text-muted)'
+                }}
+              />
+              <input
+                type="text"
+                value={quickSearch}
+                onChange={(e) => setQuickSearch(e.target.value)}
+                placeholder="Bạn muốn ăn gì hôm nay? (cơm gà, mì...)"
+                style={{
+                  width: '100%',
+                  padding: '0.7rem 1rem 0.7rem 2.4rem',
+                  border: '1.5px solid var(--border)',
+                  borderRadius: 'var(--radius-md)',
+                  outline: 'none',
+                  fontSize: '0.95rem'
+                }}
+              />
+            </div>
+            <Button type="submit" variant="accent" size="md">
+              Tìm món
+            </Button>
+          </form>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <Link to="/menu">
@@ -94,7 +135,7 @@ export default function HomePage({ onAddToCart }) {
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.9rem', color: '#a0c4c1' }}>Luồng xử lý đơn hàng</span>
+            <span style={{ fontSize: '0.9rem', color: '#a0c4c1' }}>Kiến trúc phân tán .NET 10</span>
             <span
               style={{
                 backgroundColor: 'var(--accent)',
@@ -118,10 +159,10 @@ export default function HomePage({ onAddToCart }) {
             }}
           >
             <div style={{ fontWeight: '700', fontSize: '1rem', marginBottom: '4px' }}>
-              1. Khách đặt món (Order API)
+              1. Khách đặt món (Order API Minimal API)
             </div>
             <div style={{ fontSize: '0.85rem', color: '#b5c9c7' }}>
-              Lưu Database & đẩy thông điệp vào RabbitMQ
+              Lưu PostgreSQL & đẩy thông điệp vào RabbitMQ
             </div>
           </div>
 
@@ -137,7 +178,7 @@ export default function HomePage({ onAddToCart }) {
               2. Kitchen Worker nhận & chế biến
             </div>
             <div style={{ fontSize: '0.85rem', color: '#b5c9c7' }}>
-              Pending → Preparing → Ready (Phát sự kiện)
+              Pending → Preparing → Ready (Phát sự kiện RabbitMQ)
             </div>
           </div>
 
@@ -153,7 +194,7 @@ export default function HomePage({ onAddToCart }) {
               3. Notification Service gửi Client
             </div>
             <div style={{ fontSize: '0.85rem', color: '#b5c9c7' }}>
-              Cập nhật giao diện khách hàng ngay lập tức
+              SignalR cập nhật trạng thái đơn ngay tức thì
             </div>
           </div>
         </div>
@@ -284,8 +325,7 @@ export default function HomePage({ onAddToCart }) {
             backgroundColor: 'var(--white)',
             padding: '1.75rem',
             borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-sm)',
-            border: 'none'
+            boxShadow: 'var(--shadow-sm)'
           }}
         >
           <div

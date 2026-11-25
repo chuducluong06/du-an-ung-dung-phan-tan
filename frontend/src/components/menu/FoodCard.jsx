@@ -2,9 +2,20 @@ import React, { useState } from 'react';
 import { Plus, Clock, Flame } from 'lucide-react';
 import Button from '../Button';
 import { formatCurrency } from '../../data/menuData';
+import { useCart } from '../../context/CartContext';
 
 export default function FoodCard({ item, onAddToCart }) {
   const [imgError, setImgError] = useState(false);
+  const { addToCart, getItemQuantity } = useCart();
+  const quantityInCart = getItemQuantity(item.id);
+
+  const handleAdd = () => {
+    if (onAddToCart) {
+      onAddToCart(item);
+    } else {
+      addToCart(item);
+    }
+  };
 
   // Fallback image in case network or unsplash fails
   const fallbackImage = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80";
@@ -174,10 +185,10 @@ export default function FoodCard({ item, onAddToCart }) {
           <Button
             variant="accent"
             size="sm"
-            onClick={() => onAddToCart && onAddToCart(item)}
+            onClick={handleAdd}
             icon={<Plus size={16} />}
           >
-            Chọn món
+            {quantityInCart > 0 ? `Chọn món (${quantityInCart})` : 'Chọn món'}
           </Button>
         </div>
       </div>

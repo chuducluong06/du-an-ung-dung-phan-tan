@@ -69,14 +69,7 @@ export default function Navbar({ cartCount = 0 }) {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-          className="desktop-nav"
-        >
+        <nav className="desktop-nav">
           <NavLink to="/" style={getLinkStyle}>
             Trang chủ
           </NavLink>
@@ -139,8 +132,39 @@ export default function Navbar({ cartCount = 0 }) {
           </NavLink>
         </nav>
 
-        {/* Mobile menu toggle */}
-        <div style={{ display: 'none' }} className="mobile-toggle">
+        {/* Mobile menu toggle + quick cart icon */}
+        <div className="mobile-toggle" style={{ gap: '0.75rem' }}>
+          <Link
+            to="/cart"
+            aria-label="Giỏ hàng"
+            style={{
+              position: 'relative',
+              color: 'var(--white)',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '6px'
+            }}
+          >
+            <ShoppingBag size={22} />
+            {cartCount > 0 && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '0px',
+                  right: '-4px',
+                  backgroundColor: 'var(--accent)',
+                  color: 'var(--white)',
+                  fontSize: '0.7rem',
+                  fontWeight: '700',
+                  padding: '1px 5px',
+                  borderRadius: 'var(--radius-full)',
+                  lineHeight: '1.2'
+                }}
+              >
+                {cartCount}
+              </span>
+            )}
+          </Link>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{ color: 'var(--white)', padding: '6px' }}
